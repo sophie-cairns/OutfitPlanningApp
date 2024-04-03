@@ -139,7 +139,7 @@ public class SelectOutfitFragment extends Fragment {
 
     private void selectOutfits() {
 
-        if (!selectedOutfits.isEmpty()) {
+        if (!selectedIds.isEmpty()) {
             Date existingDate;
             existingDate = clothingDbViewModel.getDateByLocalDate(selectedDate);
             Log.i("SC", "existingDate" + existingDate);
