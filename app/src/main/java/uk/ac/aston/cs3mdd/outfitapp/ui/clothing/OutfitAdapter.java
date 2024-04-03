@@ -122,7 +122,6 @@ public class OutfitAdapter extends RecyclerView.Adapter<OutfitAdapter.ViewHolder
         public ViewHolder(@NonNull View itemView, OutfitAdapter adapter) {
             super(itemView);
             clothingRecyclerView = itemView.findViewById(R.id.clothing_recycler_view);
-//            clothingRecyclerView.setPadding(10, 20, 10, 20);
             clothingAdapter = new ClothingAdapter(mContext, new ArrayList<>(), mClothingDbViewModel, false, true);
             editButton = itemView.findViewById(R.id.buttonEditOutfit);
             clothingRecyclerView.setAdapter(clothingAdapter);

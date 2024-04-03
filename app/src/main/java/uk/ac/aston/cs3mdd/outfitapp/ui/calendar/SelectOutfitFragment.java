@@ -39,6 +39,8 @@ public class SelectOutfitFragment extends Fragment {
     private List<Outfit> list = new ArrayList<>();
     private List<Outfit> selectedOutfits = new ArrayList<>();
     private LocalDate selectedDate;
+    private List<Long> selectedIds;
+
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -66,7 +68,7 @@ public class SelectOutfitFragment extends Fragment {
         confirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                selectOutfit();
+                selectOutfits();
                 navigateToDateFragment();
             }
         });
@@ -98,12 +100,32 @@ public class SelectOutfitFragment extends Fragment {
             public void onItemClick(int position) {
                 Log.i("SC", "OnItemClick Outfit");
                 Outfit clickedItem = list.get(position);
-                if (selectedOutfits.contains(clickedItem)) {
-                    selectedOutfits.remove(clickedItem);
+                Log.i("SC", "clicked item id: " + clickedItem.getId());
+                if (selectedIds.contains(clickedItem.getId())) {
+                    Log.i("SC", "Removing ");
+                    selectedIds.remove(clickedItem.getId());
                 } else {
-                    selectedOutfits.add(clickedItem);
+                    Log.i("SC", "adding ");
+                    selectedIds.add(clickedItem.getId());
                 }
 
+            }
+        });
+
+        clothingDbViewModel.getOutfitsForDate(selectedDate).observe(getViewLifecycleOwner(), new Observer<List<Outfit>>() {
+            @Override
+            public void onChanged(List<Outfit> outfits) {
+                selectedOutfits = outfits;
+                Log.i("SC", "selected outfits set");
+                selectedIds = new ArrayList<>();
+                for (Outfit item : selectedOutfits) {
+                    selectedIds.add(item.getId());
+                }
+                if (outfitAdapter != null) {
+                    outfitAdapter.setSelected(selectedIds, outfitRecyclerView);
+                    Log.i("SC", "selected Clothing items sent to ADAPTER");
+
+                }
             }
         });
 
@@ -115,8 +137,8 @@ public class SelectOutfitFragment extends Fragment {
         navController.navigate(R.id.action_navigation_select_outfit_to_navigation_calendar);
     }
 
-    private void selectOutfit() {
-        Log.i("SC", "date " + selectedDate);
+    private void selectOutfits() {
+
         if (!selectedOutfits.isEmpty()) {
             Date existingDate;
             existingDate = clothingDbViewModel.getDateByLocalDate(selectedDate);
@@ -132,14 +154,15 @@ public class SelectOutfitFragment extends Fragment {
             } else {
                 selectedDate = existingDate.getDate();
             }
-            for (Outfit outfit : selectedOutfits) {
-                Log.i("SC", "Outfit ID" + outfit.getId());
-                DateOutfitJoin join = new DateOutfitJoin(selectedDate, outfit.getId());
+            clothingDbViewModel.deleteOutfitsForDate(selectedDate);
+            for (Long outfitId : selectedIds) {
+                Log.i("SC", "Outfit ID" + outfitId);
+                DateOutfitJoin join = new DateOutfitJoin(selectedDate, outfitId);
                 dateOutfitJoins.add(join);
             }
 
             clothingDbViewModel.insertDateOutfitJoins(dateOutfitJoins);
-            selectedOutfits.clear();
+            selectedIds.clear();
         } else {
             Log.i("SC", "Selected outfits empty");
         }

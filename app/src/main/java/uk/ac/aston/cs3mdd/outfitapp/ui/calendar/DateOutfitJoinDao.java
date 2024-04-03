@@ -19,4 +19,7 @@ public interface DateOutfitJoinDao {
             "date_outfit_join.date = :date")
     LiveData<List<Outfit>> getOutfitsForDate(LocalDate date);
 
+    @Query("DELETE FROM date_outfit_join WHERE date = :date")
+    void deleteOutfitsForDate(LocalDate date);
+
 }

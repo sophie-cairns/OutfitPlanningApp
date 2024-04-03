@@ -127,6 +127,13 @@ public class ClothingDbViewModel extends AndroidViewModel {
         }
     }
 
+    public void deleteOutfitsForDate(LocalDate date) {
+        Log.i("SC", "delete outfit date joins");
+        executor.submit(() -> {
+            db.dateOutfitJoinDao().deleteOutfitsForDate(date);
+        });
+    }
+
     public Date getDateByLocalDate(LocalDate localDate) {
         try {
             Future<Date> future = executor.submit(new Callable<Date>() {

@@ -33,10 +33,10 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/add_outfit_button"
+        android:id="@+id/select_outfits_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Add Outfit Button" />
+        android:text="Select Outfits Button" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/outfitRecyclerView"

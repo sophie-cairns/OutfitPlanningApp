@@ -36,7 +36,7 @@ public class EditOutfitFragment extends Fragment {
     private List<ClothingItem> selectedClothingItems = new ArrayList<>();
     private Outfit outfit;
     private Long outfitId;
-    List<Long> selectedIds;
+    private List<Long> selectedIds;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
