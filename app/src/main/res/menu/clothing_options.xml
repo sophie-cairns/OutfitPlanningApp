@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/add_to_outfit"
+        android:title="Add to Outfit" />
+    <item
+        android:id="@+id/see_outfits"
+        android:title="See Outfits" />
+    <item
+        android:id="@+id/edit"
+        android:title="Edit" />
+    <item
+        android:id="@+id/delete"
+        android:title="Delete" />
+</menu>

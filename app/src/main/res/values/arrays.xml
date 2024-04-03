@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="clothing_types">
+        <item>Top</item>
+        <item>Trousers</item>
+        <item>Skirt</item>
+        <item>Dress</item>
+        <item>Jumper</item>
+        <item>Jacket</item>
+        <item>Tights</item>
+        <item>Shoes</item>
+    </string-array>
+    <string-array name="colours">
+        <item>Black</item>
+        <item>White</item>
+        <item>Grey</item>
+        <item>Red</item>
+        <item>Orange</item>
+        <item>Yellow</item>
+        <item>Green</item>
+        <item>Blue</item>
+        <item>Purple</item>
+        <item>Multi</item>
+        <item>Brown</item>
+        <item>Pink</item>
+        <item>Silver</item>
+        <item>Gold</item>
+        <item>Clear</item>
+    </string-array>
+</resources>

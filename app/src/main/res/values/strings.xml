@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Outfit App</string>
+    <string name="title_home">Home</string>
+    <string name="title_calendar">Calendar</string>
+    <string name="title_clothing">Clothing</string>
+    <string name="title_settings">Settings</string>
+    <string name="back"><![CDATA[<-]]></string>
+    <string name="forward"><![CDATA[->]]></string>
+</resources>

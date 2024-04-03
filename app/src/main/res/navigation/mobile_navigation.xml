@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/navigation_home">
+
+    <fragment
+        android:id="@+id/navigation_home"
+        android:name="uk.ac.aston.cs3mdd.outfitapp.ui.home.HomeFragment"
+        android:label="@string/title_home"
+        tools:layout="@layout/fragment_home" />
+
+    <fragment
+        android:id="@+id/navigation_clothing"
+        android:name="uk.ac.aston.cs3mdd.outfitapp.ui.clothing.ClothingFragment"
+        android:label="@string/title_clothing"
+        tools:layout="@layout/fragment_clothing">
+    <action
+        android:id="@+id/action_clothingFragment_to_addClothingFragment"
+        app:destination="@id/navigation_add_clothing" />
+    <action
+        android:id="@+id/action_clothingFragment_to_editClothingFragment"
+        app:destination="@id/navigation_edit_clothing" />
+    <action
+        android:id="@+id/action_clothingFragment_to_addOutfitFragment"
+        app:destination="@id/navigation_add_outfit" />
+    <action
+        android:id="@+id/action_clothingFragment_to_editOutfitFragment"
+        app:destination="@id/navigation_edit_outfit" />
+
+        </fragment>
+
+    <fragment
+        android:id="@+id/navigation_calendar"
+        android:name="uk.ac.aston.cs3mdd.outfitapp.ui.calendar.CalendarFragment"
+        android:label="@string/title_calendar"
+        tools:layout="@layout/fragment_calendar">
+    <action
+        android:id="@+id/action_navigation_calendar_to_navigation_select_outfit"
+        app:destination="@id/navigation_select_outfit" />
+    <action
+        android:id="@+id/action_navigation_calendar_to_navigation_add_event"
+        app:destination="@id/navigation_add_event" />
+    </fragment>
+    
+    <fragment
+        android:id="@+id/navigation_settings"
+        android:name="uk.ac.aston.cs3mdd.outfitapp.ui.settings.SettingsFragment"
+        android:label="@string/title_settings"
+        tools:layout="@layout/fragment_settings" />
+
+    <fragment
+        android:id="@+id/navigation_add_clothing"
+        android:name="uk.ac.aston.cs3mdd.outfitapp.ui.clothing.AddClothingFragment"
+        android:label="add clothing"
+        tools:layout="@layout/fragment_add_clothing" >
+        <action
+            android:id="@+id/action_navigation_add_clothing_to_navigation_clothing"
+            app:destination="@id/navigation_clothing" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_edit_clothing"
+        android:name="uk.ac.aston.cs3mdd.outfitapp.ui.clothing.EditClothingFragment"
+        android:label="edit clothing"
+        tools:layout="@layout/fragment_edit_clothing" >
+        <action
+            android:id="@+id/action_navigation_edit_clothing_to_navigation_clothing"
+            app:destination="@id/navigation_clothing" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_add_outfit"
+        android:name="uk.ac.aston.cs3mdd.outfitapp.ui.clothing.AddOutfitFragment"
+        android:label="add outfit"
+        tools:layout="@layout/fragment_add_outfit" >
+        <action
+            android:id="@+id/action_navigation_add_outfit_to_navigation_clothing"
+            app:destination="@id/navigation_clothing" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_edit_outfit"
+        android:name="uk.ac.aston.cs3mdd.outfitapp.ui.clothing.EditOutfitFragment"
+        android:label="edit outfit"
+        tools:layout="@layout/fragment_edit_outfit" >
+        <action
+            android:id="@+id/action_navigation_edit_outfit_to_navigation_clothing"
+            app:destination="@id/navigation_clothing" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_select_outfit"
+        android:name="uk.ac.aston.cs3mdd.outfitapp.ui.calendar.SelectOutfitFragment"
+        android:label="select outfit"
+        tools:layout="@layout/fragment_select_outfit" >
+        <action
+            android:id="@+id/action_navigation_select_outfit_to_navigation_calendar"
+            app:destination="@id/navigation_calendar" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_add_event"
+        android:name="uk.ac.aston.cs3mdd.outfitapp.ui.calendar.AddEventFragment"
+        android:label="add event"
+        tools:layout="@layout/fragment_add_event" >
+        <action
+            android:id="@+id/action_navigation_add_event_to_navigation_calendar"
+            app:destination="@id/navigation_calendar" />
+    </fragment>
+
+</navigation>

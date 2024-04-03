@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/type"
+        android:title="Type" />
+    <item
+        android:id="@+id/colour"
+        android:title="Colour" />
+    <item
+        android:id="@+id/brand"
+        android:title="Brand" />
+    <item
+        android:id="@+id/tags"
+        android:title="Tags" />
+    <item
+        android:id="@+id/clear_all"
+        android:title="Clear All" />
+
+</menu>
