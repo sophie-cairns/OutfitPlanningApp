@@ -56,6 +56,13 @@
         android:id="@+id/editTextBrand"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
+    <EditText
+        android:id="@+id/editTextTags"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textMultiLine"
+        android:hint="Enter tags (one per line)"
+        android:minLines="1" />
     <Button
         android:id="@+id/confirmButton"
         android:layout_width="match_parent"

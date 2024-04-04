@@ -27,41 +27,33 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
-import com.google.android.material.textfield.TextInputEditText;
-
 import java.io.ByteArrayOutputStream;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Arrays;
 
 import uk.ac.aston.cs3mdd.outfitapp.R;
 import uk.ac.aston.cs3mdd.outfitapp.ui.clothing.ClothingDbViewModel;
 import uk.ac.aston.cs3mdd.outfitapp.ui.clothing.ClothingItem;
 
-public class AddEventFragment extends Fragment {
+public class EditEventFragment extends Fragment {
     private Button confirmButton;
     private Button cancelButton;
-    private LocalDate selectedDate;
-    private boolean home;
+    private Event event;
     private ClothingDbViewModel clothingDbViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_add_event, container, false);
+        View view = inflater.inflate(R.layout.fragment_edit_event, container, false);
 
-        Bundle args = getArguments();
-        if (args != null) {
-            Log.i("SC", "args not null");
-            selectedDate = (LocalDate) args.getSerializable("selectedDate");
-            home = (boolean) args.getSerializable("home");
+        if (getArguments() != null) {
+            event = (Event) getArguments().getSerializable("event");
         }
 
         confirmButton = view.findViewById(R.id.confirmButton);
         cancelButton = view.findViewById(R.id.cancelButton);
 
         clothingDbViewModel = new ViewModelProvider(requireActivity()).get(ClothingDbViewModel.class);
-
 
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -70,12 +62,9 @@ public class AddEventFragment extends Fragment {
             }
         });
 
-
-
         confirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 String title = ((EditText) view.findViewById(R.id.editTextTitle)).getText().toString();
                 String location = ((EditText) view.findViewById(R.id.editTextLocation)).getText().toString();
                 LocalDate date = parseDateInput(((EditText) view.findViewById(R.id.editTextDate)).getText().toString());
@@ -99,12 +88,7 @@ public class AddEventFragment extends Fragment {
                 event.time = time;
 
                 clothingDbViewModel.insertEvent(event);
-                if (home) {
-                    navigateToHomeFragment();
-                } else {
-                    navigateToCalendarFragment();
-                }
-
+                navigateToCalendarFragment();
             }
         });
 
@@ -114,19 +98,13 @@ public class AddEventFragment extends Fragment {
 
     private void navigateToCalendarFragment() {
         NavController navController = Navigation.findNavController(requireView());
-        navController.navigate(R.id.action_navigation_add_event_to_navigation_calendar);
-    }
-
-    private void navigateToHomeFragment() {
-        NavController navController = Navigation.findNavController(requireView());
-        navController.navigate(R.id.action_navigation_add_event_to_navigation_home);
+        navController.navigate(R.id.action_navigation_edit_event_to_navigation_calendar);
     }
 
     private LocalDate parseDateInput(String dateString) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         return LocalDate.parse(dateString, formatter);
     }
-
 
     @Override
     public void onDestroyView() {

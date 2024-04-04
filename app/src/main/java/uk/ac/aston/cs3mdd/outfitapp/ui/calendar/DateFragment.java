@@ -201,6 +201,7 @@ public class DateFragment extends Fragment {
         NavController navController = Navigation.findNavController(requireView());
         Bundle args = new Bundle();
         args.putSerializable("selectedDate", selectedDate);
+        args.putSerializable("home", false);
         navController.navigate(R.id.action_navigation_calendar_to_navigation_select_outfit, args);
     }
 

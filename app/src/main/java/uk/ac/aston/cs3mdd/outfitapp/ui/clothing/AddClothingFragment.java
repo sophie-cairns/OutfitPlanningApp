@@ -39,6 +39,7 @@ import java.io.ByteArrayOutputStream;
 import java.lang.reflect.Array;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import uk.ac.aston.cs3mdd.outfitapp.R;
@@ -50,7 +51,8 @@ public class AddClothingFragment extends Fragment {
     private ImageView imageView;
     private AutoCompleteTextView autoCompleteClothingTypeTextView;
     private AutoCompleteTextView autoCompleteColourTextView;
-    private EditText editText;
+    private EditText brandEditText;
+    private EditText tagsEditText;
     private ClothingDbViewModel clothingDbViewModel;
     private String type;
     private String colour;
@@ -64,7 +66,8 @@ public class AddClothingFragment extends Fragment {
         imageView = view.findViewById(R.id.imageView);
         chooseImageButton = view.findViewById(R.id.selectImageButton);
         autoCompleteClothingTypeTextView = view.findViewById(R.id.autoCompleteClothingTypeTextView);
-        editText = view.findViewById(R.id.editTextBrand);
+        brandEditText = view.findViewById(R.id.editTextBrand);
+        tagsEditText = view.findViewById(R.id.editTextTags);
         autoCompleteColourTextView = view.findViewById(R.id.autoCompleteColourTextView);
         clothingDbViewModel = new ViewModelProvider(requireActivity()).get(ClothingDbViewModel.class);
 
@@ -113,14 +116,16 @@ public class AddClothingFragment extends Fragment {
                 Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
 
                 Uri imageUri = getImageUri(requireContext(), bitmap);
-                String brand = editText.getText().toString();
+                String brand = brandEditText.getText().toString();
+                String tagsInput = tagsEditText.getText().toString();
+                String[] tags = tagsInput.split("[ \n]+");
 
                 ClothingItem clothingItem = new ClothingItem();
                 clothingItem.image = imageUri;
                 clothingItem.type = type;
                 clothingItem.colour = colour;
                 clothingItem.brand = brand;
-                clothingItem.tags = null;
+                clothingItem.tags = Arrays.asList(tags);
 
                 clothingDbViewModel.insertClothingItem(clothingItem);
                 navigateToClothingFragment();

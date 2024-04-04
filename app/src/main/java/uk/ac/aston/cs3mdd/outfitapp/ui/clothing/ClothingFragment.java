@@ -59,6 +59,7 @@ public class ClothingFragment extends Fragment {
     private List<String> colourFilters;
     private List<String> brandFilters;
     private List<String> tagFilters;
+    private List<ClothingItem> clothingItemList;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -94,6 +95,8 @@ public class ClothingFragment extends Fragment {
 
         clothingDbViewModel = new ViewModelProvider(requireActivity()).get(ClothingDbViewModel.class);
 
+        clothingItemList = new ArrayList<>();
+
         clothingText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -115,13 +118,8 @@ public class ClothingFragment extends Fragment {
                 requireActivity().runOnUiThread(() -> {
                     if (clothingAdapter != null) {
                         clothingAdapter.updateData(clothingList);
-                        for (ClothingItem c : clothingList) {
-                            Log.i("SC", "C: " + c.getColour());
-                        }
-                        if (selectedFilters != null) {
-                            Log.i("SC", "Filter size: " + selectedFilters.size());
-                        }
                         clothingAdapter.applyFilters(typeFilters, colourFilters, brandFilters, tagFilters);
+                        clothingItemList = clothingList;
                         Log.i("SC", "onChanged: Success");
                     } else {
                         Log.i("SC", "onChanged: mAdapter is null");
@@ -255,9 +253,7 @@ public class ClothingFragment extends Fragment {
             PopupMenu clothingPopupMenu = new PopupMenu(requireContext(), itemView);
             clothingPopupMenu.inflate(R.menu.clothing_options);
             clothingPopupMenu.setOnMenuItemClickListener(item -> {
-                if (item.getItemId() == R.id.add_to_outfit) {
-                    Log.i("SC", "add to outfit");
-                } else if (item.getItemId() == R.id.edit) {
+                if (item.getItemId() == R.id.edit) {
                     Log.i("SC", "edit");
                     Bundle bundle = new Bundle();
                     bundle.putSerializable("clothingItem", clothingItem);
@@ -347,7 +343,9 @@ public class ClothingFragment extends Fragment {
                     list = brandFilters;
                 } else {
                     Log.i("SC", "tags");
-                    options = Arrays.asList(getResources().getStringArray(R.array.clothing_types));
+                    List<String> tagsLists = clothingDbViewModel.getTags(clothingItemList);
+                    options = tagsLists;
+                    Log.i("SC", "options: " + options);
                     title = "Tags";
                     list = tagFilters;
                 }

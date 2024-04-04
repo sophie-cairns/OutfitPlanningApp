@@ -8,8 +8,14 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.room.Room;
 
+import org.json.JSONArray;
+
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -179,5 +185,56 @@ public class ClothingDbViewModel extends AndroidViewModel {
         }
 
     }
+//    public List<String> getTags() {
+//        try {
+//            Future<List<String>> future = executor.submit(new Callable<List<String>>() {
+//                @Override
+//                public List<String> call() throws Exception {
+//                    return db.clothingDao().getTags();
+//                }
+//            });
+//            return future.get();
+//        } catch (ExecutionException | InterruptedException e) {
+//            e.printStackTrace();
+//            return null;
+//        }
+//
+//    }
+//    public List<String> getTags(List<ClothingItem> clothingItems) {
+//        List<String> tags = new ArrayList<>();
+//        for (ClothingItem clothingItem : clothingItems) {
+//            List<String> itemTags = db.clothingDao().getTagsByClothingItem(clothingItem.getId());
+//            for (String tag : itemTags) {
+//                tags.add(tag);
+//            }
+//        }
+//        return tags;
+//    }
+public List<String> getTags(final List<ClothingItem> clothingItems) {
+    Set<String> tags = new HashSet<>();
+    try {
+        Future<List<String>> future = executor.submit(new Callable<List<String>>() {
+            @Override
+            public List<String> call() throws Exception {
+                for (ClothingItem clothingItem : clothingItems) {
+                    String tagsString = db.clothingDao().getTagsByClothingItem(clothingItem.getId());
+                    if (tagsString != null && !tagsString.isEmpty()) {
+                        JSONArray jsonArray = new JSONArray(tagsString);
+
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            tags.add(jsonArray.getString(i));
+                        }
+                    }
+                }
+                Log.i("SC", "Tags: " + tags);
+                return new ArrayList<>(tags);
+            }
+        });
+        return future.get(); // Waits until the result is available and returns it
+    } catch (ExecutionException | InterruptedException e) {
+        e.printStackTrace();
+        return null;
+    }
+}
 
 }

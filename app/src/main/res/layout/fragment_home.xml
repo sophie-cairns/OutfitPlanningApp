@@ -28,7 +28,6 @@
 
         <Button
             android:id="@+id/button_change_location"
-            android:backgroundTint="@color/blue2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
@@ -39,8 +38,7 @@
 
     <TextView
         android:id="@+id/text_date"
-        android:layout_gravity="center_horizontal"
-        android:background="@color/purple"
+        android:background="@color/blue3"
         android:textColor="@color/white"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -58,17 +56,30 @@
 
     <TextView
         android:id="@+id/textDayMessage"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="have a great day!" />
+        android:layout_marginStart="8dp"
+        android:text="Have a great day!" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/outfitRecyclerView"
-        android:minHeight="200dp"
-        android:background="@drawable/outfit_background"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="260dp"
-        android:layout_marginBottom="10dp"/>
+        android:layout_height="wrap_content">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/outfitRecyclerView"
+            android:minHeight="200dp"
+            android:background="@drawable/outfit_background"
+            android:layout_width="match_parent"
+            android:layout_height="260dp"
+            android:layout_marginBottom="10dp"/>
+
+        <Button
+            android:id="@+id/select_outfits_button"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:background="@drawable/dots"
+            android:layout_gravity="top|end" />
+    </FrameLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/weatherRecyclerView"
@@ -78,13 +89,28 @@
         android:padding="15dp"
         android:layout_gravity="center_horizontal"
         android:background="@drawable/weather_background"/>
-
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="5dp"
-        android:textSize="20sp"
-        android:text="Today's Plans:"/>
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:textSize="20sp"
+            android:text="Today's Plans:"/>
+
+        <Space
+            android:layout_width="120dp"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/add_event_button"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="0dp"
+            android:text="Add Plans" />
+    </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/eventsRecyclerView"

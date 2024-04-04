@@ -17,6 +17,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -67,6 +69,7 @@ public class HomeFragment extends Fragment {
     private TextView locationTextView;
     private AutocompleteSupportFragment autocompleteFragment;
     private View changeLocationView;
+    private LocalDate today;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -87,7 +90,7 @@ public class HomeFragment extends Fragment {
         weatherViewModel = new ViewModelProvider(requireActivity()).get(WeatherViewModel.class);
         locationViewModel = new ViewModelProvider(requireActivity()).get(LocationViewModel.class);
 
-        LocalDate today = LocalDate.now();
+        today = LocalDate.now();
         Calendar calendar = Calendar.getInstance();
         SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE d", Locale.getDefault());
         String formattedDate = dateFormat.format(calendar.getTime());
@@ -159,7 +162,19 @@ public class HomeFragment extends Fragment {
         eventRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
         eventRecyclerView.setAdapter(eventAdapter);
 
-        observeLocation();
+        if (locationViewModel.getGivenLocation() != null) {
+            latLng = locationViewModel.getGivenLocation();
+            locationTextView.setText(getAddressFromLatLng(requireContext(),latLng));
+            Retrofit weatherretrofit = new Retrofit.Builder()
+                    .baseUrl("https://api.openweathermap.org/data/3.0/")
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
+
+            GetWeeklyWeather weatherService = weatherretrofit.create(GetWeeklyWeather.class);
+            weatherViewModel.requestForecast(new WeeklyWeatherRepo(weatherService), locationViewModel.getGivenLocation());
+        }else {
+            observeLocation();
+        }
 
         final Observer<List<Hourly>> weatherObserver = new Observer<List<Hourly>>() {
             @Override
@@ -180,6 +195,21 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 showChangeLocationPopupMenu();
+            }
+        });
+
+        Button selectOutfitButton = view.findViewById(R.id.select_outfits_button);
+        selectOutfitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                navigateToSelectOutfitFragment();
+            }
+        });
+        Button addEventButton = view.findViewById(R.id.add_event_button);
+        addEventButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                navigateToAddEventFragment();
             }
         });
 
@@ -230,24 +260,27 @@ public class HomeFragment extends Fragment {
             Button currentLocationButton = changeLocationView.findViewById(R.id.currentLocationButton);
 
 
-            currentLocationButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    newLatLng = null;
-                }
-            });
-
         final AlertDialog alertDialog = builder.create();
         alertDialog.show();
 
+        currentLocationButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                locationViewModel.setGivenLocation(null);
+                observeLocation();
+                alertDialog.dismiss();
+            }
+        });
         confirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (newLatLng != null) {
                     locationTextView.setText(getAddressFromLatLng(requireContext(), newLatLng));
+                    locationViewModel.setGivenLocation(newLatLng);
                     locationViewModel.getCurrentLocation().removeObserver(locationObserver);
                     weatherViewModel.requestForecast(new WeeklyWeatherRepo(weatherService), newLatLng);
                 } else {
+                    locationViewModel.setGivenLocation(null);
                     observeLocation();
                 }
 
@@ -283,6 +316,20 @@ public class HomeFragment extends Fragment {
         locationViewModel.getCurrentLocation().observe(getViewLifecycleOwner(), locationObserver);
     }
 
+    private void navigateToSelectOutfitFragment() {
+        NavController navController = Navigation.findNavController(requireView());
+        Bundle args = new Bundle();
+        args.putSerializable("selectedDate", today);
+        args.putSerializable("home", true);
+        navController.navigate(R.id.action_navigation_home_to_navigation_select_outfit, args);
+    }
+    private void navigateToAddEventFragment() {
+        NavController navController = Navigation.findNavController(requireView());
+        Bundle args = new Bundle();
+        args.putSerializable("selectedDate", today);
+        args.putSerializable("home", true);
+        navController.navigate(R.id.action_navigation_home_to_navigation_add_event, args);
+    }
 
     @Override
     public void onDestroyView() {

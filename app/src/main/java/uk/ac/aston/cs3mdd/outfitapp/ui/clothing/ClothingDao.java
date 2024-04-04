@@ -25,4 +25,6 @@ public interface ClothingDao {
 
     @Query("SELECT DISTINCT brand FROM clothingitem")
     List<String> getBrands();
+    @Query("SELECT tags FROM clothingitem WHERE clothingId = :id")
+    String getTagsByClothingItem(Long id);
 }

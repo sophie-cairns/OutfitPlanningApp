@@ -142,8 +142,12 @@ public class ClothingAdapter extends RecyclerView.Adapter<ClothingAdapter.ViewHo
         if (brandFilters != null && !brandFilters.isEmpty() && !brandFilters.contains(item.getBrand())) {
             return false;
         }
-        if (tagFilters != null && !tagFilters.isEmpty() && !Collections.disjoint(tagFilters, item.getTags())) {
-            return false;
+        if (tagFilters != null && !tagFilters.isEmpty()) {
+            if (item.getTags() == null) {
+                return false;
+            } else {
+                return !Collections.disjoint(tagFilters, item.getTags());
+            }
         }
         return true;
     }

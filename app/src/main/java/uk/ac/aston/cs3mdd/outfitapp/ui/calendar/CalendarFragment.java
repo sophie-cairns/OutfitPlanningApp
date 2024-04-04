@@ -4,6 +4,7 @@ import static com.google.android.gms.location.Priority.PRIORITY_BALANCED_POWER_A
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Address;
@@ -30,6 +31,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -37,12 +39,16 @@ import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
+import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
@@ -65,6 +71,12 @@ public class CalendarFragment extends Fragment implements CalendarAdapter.OnDate
     private List<Daily> weatherList;
     private WeatherViewModel weatherViewModel;
     private LatLng latLng;
+    private LatLng newLatLng;
+    private Button changeLocation;
+    private View changeLocationView;
+    private AutocompleteSupportFragment autocompleteFragment;
+    private Observer<Location> locationObserver;
+    private GetWeeklyWeather weatherService;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -76,6 +88,7 @@ public class CalendarFragment extends Fragment implements CalendarAdapter.OnDate
         monthYearText = view.findViewById(R.id.monthYearTV);
         calendarContentLayout = view.findViewById(R.id.calendar_content_layout);
         locationTextView = view.findViewById(R.id.text_location);
+        changeLocation = view.findViewById(R.id.button_change_location);
 
         weatherViewModel = new ViewModelProvider(requireActivity()).get(WeatherViewModel.class);
         locationViewModel = new ViewModelProvider(requireActivity()).get(LocationViewModel.class);
@@ -109,35 +122,19 @@ public class CalendarFragment extends Fragment implements CalendarAdapter.OnDate
             }
         });
 
+        if (locationViewModel.getGivenLocation() != null) {
+            latLng = locationViewModel.getGivenLocation();
+            locationTextView.setText(getAddressFromLatLng(requireContext(),latLng));
+            Retrofit weatherretrofit = new Retrofit.Builder()
+                    .baseUrl("https://api.openweathermap.org/data/3.0/")
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
 
-            latLng = new LatLng(40, 50);
-
-
-        final Observer<Location> locationObserver = new Observer<Location>() {
-            @Override
-            public void onChanged(@Nullable Location location) {
-                if (location != null) {
-                    double latitude = location.getLatitude();
-                    double longitude = location.getLongitude();
-                    latLng = new LatLng(latitude, longitude);
-                    Log.i("SC", "non default");
-                    Log.i("SC", "Lat" + location.getLatitude());
-                    locationTextView.setText(getAddressFromLatLng(requireContext(),latLng));
-                    Retrofit weatherretrofit = new Retrofit.Builder()
-                            .baseUrl("https://api.openweathermap.org/data/3.0/")
-                            .addConverterFactory(GsonConverterFactory.create())
-                            .build();
-
-                    GetWeeklyWeather weatherService = weatherretrofit.create(GetWeeklyWeather.class);
-                    weatherViewModel.requestForecast(new WeeklyWeatherRepo(weatherService), latLng);
-
-
-                }
-
-            }
-        };
-        locationViewModel.getCurrentLocation().observe(getViewLifecycleOwner(), locationObserver);
-
+            weatherService = weatherretrofit.create(GetWeeklyWeather.class);
+            weatherViewModel.requestForecast(new WeeklyWeatherRepo(weatherService), locationViewModel.getGivenLocation());
+        }else {
+            observeLocation();
+        }
 
         final Observer<List<Daily>> weatherObserver = new Observer<List<Daily>>() {
             @Override
@@ -149,6 +146,12 @@ public class CalendarFragment extends Fragment implements CalendarAdapter.OnDate
         };
         weatherViewModel.getDailyWeather().observe(getViewLifecycleOwner(), weatherObserver);
 
+        changeLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showChangeLocationPopupMenu();
+            }
+        });
 
         return view;
     }
@@ -276,6 +279,108 @@ public class CalendarFragment extends Fragment implements CalendarAdapter.OnDate
         }
         return null;
     }
+
+    private void observeLocation() {
+
+        final Observer<Location> locationObserver = new Observer<Location>() {
+            @Override
+            public void onChanged(@Nullable Location location) {
+                if (location != null) {
+                    double latitude = location.getLatitude();
+                    double longitude = location.getLongitude();
+                    latLng = new LatLng(latitude, longitude);
+                    Log.i("SC", "non default");
+                    Log.i("SC", "Lat" + location.getLatitude());
+                    locationTextView.setText(getAddressFromLatLng(requireContext(),latLng));
+                    Retrofit weatherretrofit = new Retrofit.Builder()
+                            .baseUrl("https://api.openweathermap.org/data/3.0/")
+                            .addConverterFactory(GsonConverterFactory.create())
+                            .build();
+
+                    weatherService = weatherretrofit.create(GetWeeklyWeather.class);
+                    weatherViewModel.requestForecast(new WeeklyWeatherRepo(weatherService), latLng);
+
+
+                }
+
+            }
+        };
+        locationViewModel.getCurrentLocation().observe(getViewLifecycleOwner(), locationObserver);
+    }
+
+    private void showChangeLocationPopupMenu() {
+        if (changeLocationView == null) {
+            changeLocationView = getLayoutInflater().inflate(R.layout.location_view, null);
+            if (autocompleteFragment == null) {
+                autocompleteFragment = (AutocompleteSupportFragment)
+                        getChildFragmentManager().findFragmentById(R.id.autocompleteFragment);
+                if (autocompleteFragment == null) {
+                    autocompleteFragment = AutocompleteSupportFragment.newInstance();
+                    getChildFragmentManager().beginTransaction()
+                            .add(R.id.autocompleteFragment, autocompleteFragment)
+                            .commit();
+                }
+            }
+            autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG));
+
+            autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+
+                @Override
+                public void onPlaceSelected(@NonNull Place place) {
+
+                    newLatLng = place.getLatLng();
+
+
+                }
+
+                @Override
+                public void onError(@NonNull Status status) {
+                    Log.e("SC", "onError: " + status);
+                }
+            });
+        }
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+
+        if (changeLocationView.getParent() != null) {
+            ((ViewGroup) changeLocationView.getParent()).removeView(changeLocationView);
+        }
+        builder.setView(changeLocationView);
+
+
+        Button confirmButton = changeLocationView.findViewById(R.id.confirmButton);
+        Button currentLocationButton = changeLocationView.findViewById(R.id.currentLocationButton);
+
+        final AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+
+        currentLocationButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                locationViewModel.setGivenLocation(null);
+                observeLocation();
+                alertDialog.dismiss();
+            }
+        });
+        confirmButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (newLatLng != null) {
+                    locationTextView.setText(getAddressFromLatLng(requireContext(), newLatLng));
+                    locationViewModel.setGivenLocation(newLatLng);
+                    locationViewModel.getCurrentLocation().removeObserver(locationObserver);
+                    Log.i("SC", "weatherService: " + weatherService);
+                    weatherViewModel.requestForecast(new WeeklyWeatherRepo(weatherService), newLatLng);
+                } else {
+                    locationViewModel.setGivenLocation(null);
+                    observeLocation();
+                }
+
+                alertDialog.dismiss();
+            }
+        });
+    }
+
 
     @Override
     public void onDestroyView() {

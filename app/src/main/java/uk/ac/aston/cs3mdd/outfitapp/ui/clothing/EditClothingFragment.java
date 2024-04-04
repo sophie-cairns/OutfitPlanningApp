@@ -14,6 +14,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 
 import androidx.activity.result.ActivityResultCallback;
@@ -26,6 +27,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import java.io.ByteArrayOutputStream;
+import java.util.Arrays;
 
 import uk.ac.aston.cs3mdd.outfitapp.R;
 
@@ -36,6 +38,8 @@ public class EditClothingFragment extends Fragment {
     private ImageView imageView;
     private AutoCompleteTextView autoCompleteClothingTypeTextView;
     private AutoCompleteTextView autoCompleteColourTextView;
+    private EditText brandEditText;
+    private EditText tagsEditText;
     private ClothingDbViewModel clothingDbViewModel;
     private String type;
     private String colour;
@@ -55,6 +59,8 @@ public class EditClothingFragment extends Fragment {
         imageView.setImageURI(clothingItem.getImage());
         chooseImageButton = view.findViewById(R.id.selectImageButton);
         autoCompleteClothingTypeTextView = view.findViewById(R.id.autoCompleteClothingTypeTextView);
+        brandEditText = view.findViewById(R.id.editTextBrand);
+        tagsEditText = view.findViewById(R.id.editTextTags);
         type = clothingItem.getType();
         autoCompleteClothingTypeTextView.setText(type); 
         autoCompleteColourTextView = view.findViewById(R.id.autoCompleteColourTextView);
@@ -108,16 +114,17 @@ public class EditClothingFragment extends Fragment {
                 Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
 
                 Uri imageUri = getImageUri(requireContext(), bitmap);
-
-//                String brand = ((TextInputEditText) v.findViewById(R.id.editTextBrand)).getText().toString();
+                String brand = brandEditText.getText().toString();
+                String tagsInput = tagsEditText.getText().toString();
+                String[] tags = tagsInput.split("[ \n]+");
 
 
 
                 clothingItem.image = imageUri;
                 clothingItem.type = type;
                 clothingItem.colour = colour;
-//                clothingItem.brand = brand;
-                clothingItem.tags = null;
+                clothingItem.brand = brand;
+                clothingItem.tags = Arrays.asList(tags);
 
                 clothingDbViewModel.insertClothingItem(clothingItem);
                 navigateToClothingFragment();

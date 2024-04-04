@@ -40,7 +40,7 @@ public class SelectOutfitFragment extends Fragment {
     private List<Outfit> selectedOutfits = new ArrayList<>();
     private LocalDate selectedDate;
     private List<Long> selectedIds;
-
+    private boolean home;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -50,6 +50,7 @@ public class SelectOutfitFragment extends Fragment {
         if (args != null) {
             Log.i("SC", "args not null");
             selectedDate = (LocalDate) args.getSerializable("selectedDate");
+            home = (boolean) args.getSerializable("home");
         }
 
         outfitsViewLayout = inflater.inflate(R.layout.outfits_view, null);
@@ -69,7 +70,12 @@ public class SelectOutfitFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 selectOutfits();
-                navigateToDateFragment();
+                if (home) {
+                    navigateToHomeFragment();
+                } else {
+                    navigateToDateFragment();
+                }
+
             }
         });
 
@@ -98,14 +104,10 @@ public class SelectOutfitFragment extends Fragment {
         outfitAdapter.setOnItemClickListener(new OutfitAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
-                Log.i("SC", "OnItemClick Outfit");
                 Outfit clickedItem = list.get(position);
-                Log.i("SC", "clicked item id: " + clickedItem.getId());
                 if (selectedIds.contains(clickedItem.getId())) {
-                    Log.i("SC", "Removing ");
                     selectedIds.remove(clickedItem.getId());
                 } else {
-                    Log.i("SC", "adding ");
                     selectedIds.add(clickedItem.getId());
                 }
 
@@ -135,6 +137,10 @@ public class SelectOutfitFragment extends Fragment {
     private void navigateToDateFragment() {
         NavController navController = Navigation.findNavController(requireView());
         navController.navigate(R.id.action_navigation_select_outfit_to_navigation_calendar);
+    }
+    private void navigateToHomeFragment() {
+        NavController navController = Navigation.findNavController(requireView());
+        navController.navigate(R.id.action_navigation_select_outfit_to_navigation_home);
     }
 
     private void selectOutfits() {
