@@ -48,6 +48,7 @@ import uk.ac.aston.cs3mdd.outfitapp.ui.calendar.EventAdapter;
 import uk.ac.aston.cs3mdd.outfitapp.ui.calendar.GetWeeklyWeather;
 import uk.ac.aston.cs3mdd.outfitapp.ui.calendar.WeatherViewModel;
 import uk.ac.aston.cs3mdd.outfitapp.ui.calendar.WeeklyWeatherRepo;
+import uk.ac.aston.cs3mdd.outfitapp.ui.clothing.ClothingAdapter;
 import uk.ac.aston.cs3mdd.outfitapp.ui.clothing.ClothingDbViewModel;
 import uk.ac.aston.cs3mdd.outfitapp.ui.clothing.Outfit;
 import uk.ac.aston.cs3mdd.outfitapp.ui.clothing.OutfitAdapter;
@@ -213,6 +214,14 @@ public class HomeFragment extends Fragment {
             }
         });
 
+        eventAdapter.setOnItemClickListener(new EventAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                Event event = eventAdapter.getItem(position);
+                navigateToEditEventFragment(event);
+            }
+        });
+
         return view;
     }
 
@@ -329,6 +338,13 @@ public class HomeFragment extends Fragment {
         args.putSerializable("selectedDate", today);
         args.putSerializable("home", true);
         navController.navigate(R.id.action_navigation_home_to_navigation_add_event, args);
+    }
+    private void navigateToEditEventFragment(Event event) {
+        NavController navController = Navigation.findNavController(requireView());
+        Bundle args = new Bundle();
+        args.putSerializable("event", event);
+        args.putSerializable("home", true);
+        navController.navigate(R.id.action_navigation_home_to_navigation_edit_event, args);
     }
 
     @Override

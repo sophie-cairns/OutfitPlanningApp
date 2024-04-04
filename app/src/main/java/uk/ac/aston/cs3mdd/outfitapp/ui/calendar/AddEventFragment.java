@@ -60,6 +60,10 @@ public class AddEventFragment extends Fragment {
         confirmButton = view.findViewById(R.id.confirmButton);
         cancelButton = view.findViewById(R.id.cancelButton);
 
+        EditText editTextDate = view.findViewById(R.id.editTextDate);
+        editTextDate.setText(formatDate(selectedDate));
+
+
         clothingDbViewModel = new ViewModelProvider(requireActivity()).get(ClothingDbViewModel.class);
 
 
@@ -125,6 +129,11 @@ public class AddEventFragment extends Fragment {
     private LocalDate parseDateInput(String dateString) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         return LocalDate.parse(dateString, formatter);
+    }
+
+    private String formatDate(LocalDate date) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        return formatter.format(date);
     }
 
 

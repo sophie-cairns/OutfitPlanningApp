@@ -4,11 +4,12 @@ import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 @Entity
-public class Event {
+public class Event implements Serializable {
     @PrimaryKey(autoGenerate = true)
     private long eventId;
     public String event;

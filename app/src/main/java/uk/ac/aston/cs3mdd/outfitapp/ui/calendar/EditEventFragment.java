@@ -41,6 +41,7 @@ public class EditEventFragment extends Fragment {
     private Button cancelButton;
     private Event event;
     private ClothingDbViewModel clothingDbViewModel;
+    private boolean home;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -48,10 +49,22 @@ public class EditEventFragment extends Fragment {
 
         if (getArguments() != null) {
             event = (Event) getArguments().getSerializable("event");
+            home = (boolean) getArguments().getSerializable("home");
         }
 
         confirmButton = view.findViewById(R.id.confirmButton);
         cancelButton = view.findViewById(R.id.cancelButton);
+
+        EditText titleEditText = view.findViewById(R.id.editTextTitle);
+        EditText locationEditText = view.findViewById(R.id.editTextLocation);
+        EditText dateEditText = view.findViewById(R.id.editTextDate);
+        EditText timeEditText = view.findViewById(R.id.editTextTime);
+
+        titleEditText.setText(event.getEvent());
+        locationEditText.setText(event.getLocation());
+        dateEditText.setText(formatDate(event.getDate()));
+        timeEditText.setText(event.getTime());
+
 
         clothingDbViewModel = new ViewModelProvider(requireActivity()).get(ClothingDbViewModel.class);
 
@@ -81,14 +94,18 @@ public class EditEventFragment extends Fragment {
                     clothingDbViewModel.insertDate(newDate);
                 }
 
-                Event event = new Event();
                 event.event = title;
                 event.location = location;
                 event.date = date;
                 event.time = time;
 
                 clothingDbViewModel.insertEvent(event);
-                navigateToCalendarFragment();
+                if (home) {
+                    navigateToHomeFragment();
+                } else {
+                    navigateToCalendarFragment();
+                }
+
             }
         });
 
@@ -101,9 +118,19 @@ public class EditEventFragment extends Fragment {
         navController.navigate(R.id.action_navigation_edit_event_to_navigation_calendar);
     }
 
+    private void navigateToHomeFragment() {
+        NavController navController = Navigation.findNavController(requireView());
+        navController.navigate(R.id.action_navigation_edit_event_to_navigation_home);
+    }
+
     private LocalDate parseDateInput(String dateString) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         return LocalDate.parse(dateString, formatter);
+    }
+
+    private String formatDate(LocalDate date) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        return formatter.format(date);
     }
 
     @Override

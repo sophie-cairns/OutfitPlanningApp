@@ -22,7 +22,9 @@ import java.util.Comparator;
 import java.util.List;
 
 import uk.ac.aston.cs3mdd.outfitapp.R;
+import uk.ac.aston.cs3mdd.outfitapp.ui.clothing.ClothingAdapter;
 import uk.ac.aston.cs3mdd.outfitapp.ui.clothing.ClothingDbViewModel;
+import uk.ac.aston.cs3mdd.outfitapp.ui.clothing.ClothingItem;
 
 public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHolder> {
 
@@ -30,6 +32,8 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
     private final LayoutInflater mInflater;
     private final Context mContext;
     private ClothingDbViewModel mClothingDbViewModel;
+    private EventAdapter.OnItemClickListener listener;
+
 
     public EventAdapter(Context context, List<Event> events, ClothingDbViewModel dbViewModel) {
         mInflater = LayoutInflater.from(context);
@@ -53,7 +57,15 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
         holder.eventLocationTextView.setText(event.getLocation());
         holder.eventTimeTextView.setText(event.getTime());
 
-
+        holder.buttonEditEvent.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick (View v){
+                if (listener != null) {
+                        listener.onItemClick(position);
+                    }
+            }
+    });
     }
 
     @Override
@@ -79,9 +91,22 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
         notifyDataSetChanged();
     }
 
+    public Event getItem(int position) {
+        if (position >= 0 && position < mEvents.size()) {
+            return mEvents.get(position);
+        }
+        return null;
+    }
 
+    public interface OnItemClickListener {
+        void onItemClick(int position);
+    }
 
-    static class EventViewHolder extends RecyclerView.ViewHolder {
+    public void setOnItemClickListener(EventAdapter.OnItemClickListener listener) {
+        this.listener = listener;
+    }
+
+    public class EventViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public final TextView eventNameTextView;
         public final TextView eventLocationTextView;
         public final TextView eventTimeTextView;
@@ -94,6 +119,15 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
             eventTimeTextView = itemView.findViewById(R.id.eventTimeTextView);
             buttonEditEvent = itemView.findViewById(R.id.buttonEditEvent);
 
+        }
+        @Override
+        public void onClick(View v) {
+            if (listener != null) {
+                int position = getAdapterPosition();
+                if (position != RecyclerView.NO_POSITION) {
+                    listener.onItemClick(position);
+                }
+            }
         }
     }
 }

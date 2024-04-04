@@ -18,7 +18,7 @@
         app:destination="@id/navigation_add_event" />
     <action
         android:id="@+id/action_navigation_home_to_navigation_edit_event"
-        app:destination="@id/navigation_edit_outfit" />
+        app:destination="@id/navigation_edit_event" />
     </fragment>
 
     <fragment
