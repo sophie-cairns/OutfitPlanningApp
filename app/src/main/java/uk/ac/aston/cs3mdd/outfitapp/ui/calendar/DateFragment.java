@@ -151,7 +151,7 @@ public class DateFragment extends Fragment {
         };
         clothingDbViewModel.getEventsForDate(selectedDate).observe(getViewLifecycleOwner(), eventListObserver);
         RecyclerView eventRecyclerView = view.findViewById(R.id.eventsRecyclerView);
-        eventAdapter = new EventAdapter(getContext(), new ArrayList<>(), clothingDbViewModel);
+        eventAdapter = new EventAdapter(getContext(), new ArrayList<>(), clothingDbViewModel, true);
         eventRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
         eventRecyclerView.setAdapter(eventAdapter);
 
@@ -178,6 +178,14 @@ public class DateFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 navigateToAddEventFragment();
+            }
+        });
+
+        eventAdapter.setOnItemClickListener(new EventAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                Event event = eventAdapter.getItem(position);
+                navigateToEditEventFragment(event);
             }
         });
 
@@ -210,7 +218,15 @@ public class DateFragment extends Fragment {
         Bundle args = new Bundle();
         args.putSerializable("selectedDate", selectedDate);
         args.putSerializable("home", false);
-        navController.navigate(R.id.action_navigation_calendar_to_navigation_add_event);
+        navController.navigate(R.id.action_navigation_calendar_to_navigation_add_event, args);
+    }
+
+    private void navigateToEditEventFragment(Event event) {
+        NavController navController = Navigation.findNavController(requireView());
+        Bundle args = new Bundle();
+        args.putSerializable("event", event);
+        args.putSerializable("home", false);
+        navController.navigate(R.id.action_navigation_calendar_to_navigation_edit_event, args);
     }
 
 }

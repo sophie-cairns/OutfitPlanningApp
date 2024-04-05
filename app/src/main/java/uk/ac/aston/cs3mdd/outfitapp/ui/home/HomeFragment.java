@@ -159,7 +159,7 @@ public class HomeFragment extends Fragment {
         };
         clothingDbViewModel.getEventsForDate(today).observe(getViewLifecycleOwner(), eventListObserver);
         RecyclerView eventRecyclerView = view.findViewById(R.id.eventsRecyclerView);
-        eventAdapter = new EventAdapter(getContext(), new ArrayList<>(), clothingDbViewModel);
+        eventAdapter = new EventAdapter(getContext(), new ArrayList<>(), clothingDbViewModel, false);
         eventRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
         eventRecyclerView.setAdapter(eventAdapter);
 
@@ -266,12 +266,19 @@ public class HomeFragment extends Fragment {
 
 
             Button confirmButton = changeLocationView.findViewById(R.id.confirmButton);
+            Button cancelButton = changeLocationView.findViewById(R.id.cancelButton);
             Button currentLocationButton = changeLocationView.findViewById(R.id.currentLocationButton);
 
 
         final AlertDialog alertDialog = builder.create();
         alertDialog.show();
 
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.dismiss();
+            }
+        });
         currentLocationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

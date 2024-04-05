@@ -2,11 +2,13 @@ package uk.ac.aston.cs3mdd.outfitapp.ui.calendar;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,13 +35,15 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
     private final Context mContext;
     private ClothingDbViewModel mClothingDbViewModel;
     private EventAdapter.OnItemClickListener listener;
+    private boolean resize;
 
 
-    public EventAdapter(Context context, List<Event> events, ClothingDbViewModel dbViewModel) {
+    public EventAdapter(Context context, List<Event> events, ClothingDbViewModel dbViewModel, boolean resize) {
         mInflater = LayoutInflater.from(context);
         this.mEvents = events;
         this.mContext = context;
         this.mClothingDbViewModel = dbViewModel;
+        this.resize = resize;
 
     }
 
@@ -53,19 +57,43 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
     public void onBindViewHolder(EventViewHolder holder, int position) {
         Event event = mEvents.get(position);
 
-        holder.eventNameTextView.setText(event.getEvent());
-        holder.eventLocationTextView.setText(event.getLocation());
-        holder.eventTimeTextView.setText(event.getTime());
+        if (resize) {
+//            holder.eventNameTextView.setTextSize(15);
+//            holder.eventLocationTextView.setTextSize(15);
+//            holder.eventTimeTextView.setTextSize(15);
+            holder.verticalLinearLayout.setVisibility(View.VISIBLE);
+            holder.horizontalLinearLayout.setVisibility(View.GONE);
 
-        holder.buttonEditEvent.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick (View v){
-                if (listener != null) {
+            holder.eventName2TextView.setText(event.getEvent());
+            Log.i("SC", "EventName1: " + event.getEvent());
+            holder.eventLocation2TextView.setText(event.getLocation());
+            holder.eventTime2TextView.setText(event.getTime());
+
+            holder.buttonEditEvent2.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick (View v){
+                    if (listener != null) {
                         listener.onItemClick(position);
                     }
-            }
-    });
+                }
+            });
+        } else {
+            holder.eventNameTextView.setText(event.getEvent());
+            Log.i("SC", "EventName2: " + event.getEvent());
+            holder.eventLocationTextView.setText(event.getLocation());
+            holder.eventTimeTextView.setText(event.getTime());
+
+            holder.buttonEditEvent.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick (View v){
+                    if (listener != null) {
+                        listener.onItemClick(position);
+                    }
+                }
+            });
+        }
     }
 
     @Override
@@ -74,19 +102,22 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
     }
 
     public void updateData(List<Event> list) {
-        Collections.sort(list, new Comparator<Event>() {
-            @Override
-            public int compare(Event event1, Event event2) {
+        try {
+            Collections.sort(list, new Comparator<Event>() {
+                @Override
+                public int compare(Event event1, Event event2) {
 
-                LocalTime time1 = LocalTime.parse(event1.getTime(), DateTimeFormatter.ofPattern("HH:mm"));
-                LocalTime time2 = LocalTime.parse(event2.getTime(), DateTimeFormatter.ofPattern("HH:mm"));
-
-
-                return time1.compareTo(time2);
-            }
-        });
+                    LocalTime time1 = LocalTime.parse(event1.getTime(), DateTimeFormatter.ofPattern("HH:mm"));
+                    LocalTime time2 = LocalTime.parse(event2.getTime(), DateTimeFormatter.ofPattern("HH:mm"));
 
 
+                    return time1.compareTo(time2);
+                }
+            });
+
+        } catch (Exception e) {
+            Log.i("SC", "Incorrect Time format: " + e);
+        }
         this.mEvents = list;
         notifyDataSetChanged();
     }
@@ -110,7 +141,13 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
         public final TextView eventNameTextView;
         public final TextView eventLocationTextView;
         public final TextView eventTimeTextView;
+        public final TextView eventName2TextView;
+        public final TextView eventLocation2TextView;
+        public final TextView eventTime2TextView;
+        public final LinearLayout verticalLinearLayout;
+        public final LinearLayout horizontalLinearLayout;
         private Button buttonEditEvent;
+        private Button buttonEditEvent2;
 
         EventViewHolder(View itemView) {
             super(itemView);
@@ -118,6 +155,12 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
             eventLocationTextView = itemView.findViewById(R.id.eventLocationTextView);
             eventTimeTextView = itemView.findViewById(R.id.eventTimeTextView);
             buttonEditEvent = itemView.findViewById(R.id.buttonEditEvent);
+            eventName2TextView = itemView.findViewById(R.id.title2TextView);
+            eventLocation2TextView = itemView.findViewById(R.id.eventLocation2TextView);
+            eventTime2TextView = itemView.findViewById(R.id.eventTime2TextView);
+            buttonEditEvent2 = itemView.findViewById(R.id.buttonEdit2Event);
+            verticalLinearLayout = itemView.findViewById(R.id.verticalLinearLayout);
+            horizontalLinearLayout = itemView.findViewById(R.id.horizontalLinearLayout);
 
         }
         @Override

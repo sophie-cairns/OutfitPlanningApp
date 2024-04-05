@@ -118,7 +118,9 @@ public class AddEventFragment extends Fragment {
 
     private void navigateToCalendarFragment() {
         NavController navController = Navigation.findNavController(requireView());
-        navController.navigate(R.id.action_navigation_add_event_to_navigation_calendar);
+        Bundle args = new Bundle();
+        args.putSerializable("selectedDate", selectedDate);
+        navController.navigate(R.id.action_navigation_add_event_to_navigation_calendar, args);
     }
 
     private void navigateToHomeFragment() {

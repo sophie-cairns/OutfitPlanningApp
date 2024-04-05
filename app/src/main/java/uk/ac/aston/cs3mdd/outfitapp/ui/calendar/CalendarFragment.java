@@ -107,6 +107,10 @@ public class CalendarFragment extends Fragment implements CalendarAdapter.OnDate
         Button previousMonthButton = view.findViewById(R.id.previousMonthButton);
         Button nextMonthButton = view.findViewById(R.id.nextMonthButton);
 
+        if (getArguments() != null) {
+            selectedDate = (LocalDate) getArguments().getSerializable("selectedDate");
+            navigateToDateFragment();
+        }
 
         previousMonthButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -215,35 +219,35 @@ public class CalendarFragment extends Fragment implements CalendarAdapter.OnDate
         if(!dayText.equals(""))
         {
             selectedDate = LocalDate.of(selectedDate.getYear(), selectedDate.getMonth(), Integer.parseInt(dayText));
-            String message = "Selected Date " + dayText + " " + monthYearFromDate(selectedDate);
-            Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show(); //may delete
+            navigateToDateFragment();
+        }
+    }
 
-            Daily selectedWeather = null;
-            if (weatherList != null) {
-                Log.i("SC", "Weather list not null");
-                for (Daily weather : weatherList) {
-                    if (weather.getLocaleDate().isEqual(selectedDate)) {
-                        selectedWeather = weather;
-                        break;
-                    }
+    public void navigateToDateFragment() {
+        Daily selectedWeather = null;
+        if (weatherList != null) {
+            Log.i("SC", "Weather list not null");
+            for (Daily weather : weatherList) {
+                if (weather.getLocaleDate().isEqual(selectedDate)) {
+                    selectedWeather = weather;
+                    break;
                 }
             }
-//            Log.i("SC", selectedWeather.toString());
-            Bundle bundle = new Bundle();
-            bundle.putString("selectedDate", selectedDate.toString());
-            bundle.putSerializable("weather", selectedWeather);
-
-            DateFragment dateFragment = new DateFragment();
-            dateFragment.setArguments(bundle);
-
-            FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
-            transaction.replace(R.id.frame_container, dateFragment);
-            transaction.addToBackStack(null);
-            transaction.commit();
-
-            calendarContentLayout.setVisibility(View.GONE);
-
         }
+//            Log.i("SC", selectedWeather.toString());
+        Bundle bundle = new Bundle();
+        bundle.putString("selectedDate", selectedDate.toString());
+        bundle.putSerializable("weather", selectedWeather);
+
+        DateFragment dateFragment = new DateFragment();
+        dateFragment.setArguments(bundle);
+
+        FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+        transaction.replace(R.id.frame_container, dateFragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
+
+        calendarContentLayout.setVisibility(View.GONE);
     }
 
     public static String getAddressFromLatLng(Context context, LatLng latLng) {
@@ -349,11 +353,18 @@ public class CalendarFragment extends Fragment implements CalendarAdapter.OnDate
 
 
         Button confirmButton = changeLocationView.findViewById(R.id.confirmButton);
+        Button cancelButton = changeLocationView.findViewById(R.id.cancelButton);
         Button currentLocationButton = changeLocationView.findViewById(R.id.currentLocationButton);
 
         final AlertDialog alertDialog = builder.create();
         alertDialog.show();
 
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.dismiss();
+            }
+        });
         currentLocationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

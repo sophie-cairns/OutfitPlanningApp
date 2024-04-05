@@ -62,5 +62,11 @@
         android:layout_height="50dp"
         android:onClick="onDialogButtonClick"
         android:text="Cancel" />
+    <Button
+        android:id="@+id/deleteButton"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:onClick="onDialogButtonClick"
+        android:text="Delete Event" />
 
 </LinearLayout>

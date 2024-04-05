@@ -1,43 +1,106 @@
 <?xml version="1.0" encoding="utf-8"?>
- <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:id="@+id/horizontalLinearLayout"
+        android:visibility="visible"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/titleTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="4dp"
+            android:text="Event Name"
+            android:textSize="20sp" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/eventLocationTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="4dp"
+            android:text="Location"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/eventTimeTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="4dp"
+            android:text="Time"
+            android:textSize="20sp" />
+
+
+        <Button
+            android:id="@+id/buttonEditEvent"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="10dp"
+            android:background="@drawable/dots"
+            android:onClick="editButtonClick"
+            app:layout_constraintStart_toStartOf="parent" />
+    </LinearLayout>
+    </LinearLayout>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+android:id="@+id/verticalLinearLayout"
+android:orientation="vertical"
+android:layout_width="match_parent"
+android:layout_height="wrap_content"
+android:visibility="gone">
     <TextView
-        android:id="@+id/titleTextView"
-        android:textSize="20sp"
+        android:id="@+id/title2TextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="4dp"
-        android:text="Event Name" />
+        android:text="Event Name"
+        android:textSize="20sp" />
 
-    <TextView
-        android:id="@+id/eventLocationTextView"
-        android:textSize="20sp"
+
+    <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="4dp"
-        android:text="Location" />
+        android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/eventTimeTextView"
-        android:textSize="20sp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="4dp"
-        android:text="Time" />
+        <TextView
+            android:id="@+id/eventLocation2TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="4dp"
+            android:text="Location"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/eventTime2TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="4dp"
+            android:text="Time"
+            android:textSize="20sp" />
 
 
-    <Button
-        android:id="@+id/buttonEditEvent"
-        android:layout_width="18dp"
-        android:layout_height="18dp"
-        android:layout_marginStart="10dp"
-        android:layout_gravity="center_vertical"
-        android:background="@drawable/dots"
-        android:onClick="editButtonClick"
-        app:layout_constraintStart_toStartOf="parent" />
+        <Button
+            android:id="@+id/buttonEdit2Event"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="10dp"
+            android:background="@drawable/dots"
+            android:onClick="editButtonClick"
+            app:layout_constraintStart_toStartOf="parent" />
+    </LinearLayout>
 </LinearLayout>
+</LinearLayout>
+
 
 

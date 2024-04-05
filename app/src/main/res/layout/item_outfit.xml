@@ -7,15 +7,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/clothing_recycler_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/clothing_background"
-        tools:layout_editor_absoluteX="1dp"
-        tools:layout_editor_absoluteY="1dp"
-        xmlns:tools="http://schemas.android.com/tools" />
-
     <Button
         android:id="@+id/buttonEditOutfit"
         android:layout_width="match_parent"
@@ -25,6 +16,16 @@
         android:background="@drawable/transparent"
         android:onClick="editButtonClick"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/clothing_recycler_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/clothing_background"
+        tools:layout_editor_absoluteX="1dp"
+        tools:layout_editor_absoluteY="1dp"
+        xmlns:tools="http://schemas.android.com/tools" />
+
 
     <ImageView
         android:id="@+id/imageViewSelector"

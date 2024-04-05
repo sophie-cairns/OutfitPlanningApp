@@ -39,6 +39,7 @@ import uk.ac.aston.cs3mdd.outfitapp.ui.clothing.ClothingItem;
 public class EditEventFragment extends Fragment {
     private Button confirmButton;
     private Button cancelButton;
+    private Button deleteButton;
     private Event event;
     private ClothingDbViewModel clothingDbViewModel;
     private boolean home;
@@ -54,6 +55,7 @@ public class EditEventFragment extends Fragment {
 
         confirmButton = view.findViewById(R.id.confirmButton);
         cancelButton = view.findViewById(R.id.cancelButton);
+        deleteButton = view.findViewById(R.id.deleteButton);
 
         EditText titleEditText = view.findViewById(R.id.editTextTitle);
         EditText locationEditText = view.findViewById(R.id.editTextLocation);
@@ -71,7 +73,22 @@ public class EditEventFragment extends Fragment {
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                navigateToCalendarFragment();
+                if (home) {
+                    navigateToHomeFragment();
+                } else {
+                    navigateToCalendarFragment();
+                }
+            }
+        });
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                clothingDbViewModel.deleteEvent(event);
+                if (home) {
+                    navigateToHomeFragment();
+                } else {
+                    navigateToCalendarFragment();
+                }
             }
         });
 
@@ -115,7 +132,9 @@ public class EditEventFragment extends Fragment {
 
     private void navigateToCalendarFragment() {
         NavController navController = Navigation.findNavController(requireView());
-        navController.navigate(R.id.action_navigation_edit_event_to_navigation_calendar);
+        Bundle args = new Bundle();
+        args.putSerializable("selectedDate", event.getDate());
+        navController.navigate(R.id.action_navigation_edit_event_to_navigation_calendar, args);
     }
 
     private void navigateToHomeFragment() {
