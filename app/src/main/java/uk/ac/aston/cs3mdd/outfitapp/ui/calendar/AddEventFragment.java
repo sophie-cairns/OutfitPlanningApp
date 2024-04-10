@@ -70,7 +70,11 @@ public class AddEventFragment extends Fragment {
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                navigateToCalendarFragment();
+                if (home) {
+                    navigateToHomeFragment();
+                } else {
+                    navigateToCalendarFragment();
+                }
             }
         });
 

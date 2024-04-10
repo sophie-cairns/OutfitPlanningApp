@@ -13,7 +13,7 @@ import uk.ac.aston.cs3mdd.outfitapp.ui.calendar.Event;
 import uk.ac.aston.cs3mdd.outfitapp.ui.calendar.EventConverters;
 
 
-@Database(entities = {ClothingItem.class, Outfit.class, OutfitClothingItemJoin.class, Date.class, Event.class, DateOutfitJoin.class}, version = 1)
+@Database(entities = {ClothingItem.class, Outfit.class, OutfitClothingItemJoin.class, Date.class, Event.class, DateOutfitJoin.class}, version = 1, exportSchema = true)
 @TypeConverters({ClothingItemConverters.class, EventConverters.class})
 public abstract class AppDatabase extends RoomDatabase {
     public abstract ClothingDao clothingDao();

@@ -7,14 +7,16 @@ import androidx.room.PrimaryKey;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-
-@Entity
+@Entity(foreignKeys = @ForeignKey(
+        entity = Date.class,
+        parentColumns = "date",
+        childColumns = "date",
+        onDelete = ForeignKey.CASCADE))
 public class Event implements Serializable {
     @PrimaryKey(autoGenerate = true)
     private long eventId;
     public String event;
     public String location;
-//    @ForeignKey(Date.class)
     public LocalDate date;
     public String time;
 

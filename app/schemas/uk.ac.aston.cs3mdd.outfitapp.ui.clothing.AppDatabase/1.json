@@ -1,0 +1,285 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "fd967e7fa49d024d5cb53542cf1a1d2b",
+    "entities": [
+      {
+        "tableName": "ClothingItem",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`clothingId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `image` TEXT, `type` TEXT, `colour` TEXT, `brand` TEXT, `tags` TEXT)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "clothingId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "image",
+            "columnName": "image",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "type",
+            "columnName": "type",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "colour",
+            "columnName": "colour",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "brand",
+            "columnName": "brand",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "tags",
+            "columnName": "tags",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "clothingId"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "outfits",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`outfitId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `tags` TEXT)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "outfitId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "tags",
+            "columnName": "tags",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "outfitId"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "outfit_clothing_item_join",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`outfitId` INTEGER NOT NULL, `clothingId` INTEGER NOT NULL, PRIMARY KEY(`outfitId`, `clothingId`), FOREIGN KEY(`outfitId`) REFERENCES `outfits`(`outfitId`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`clothingId`) REFERENCES `ClothingItem`(`clothingId`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "outfitId",
+            "columnName": "outfitId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "clothingId",
+            "columnName": "clothingId",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "outfitId",
+            "clothingId"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_outfit_clothing_item_join_outfitId",
+            "unique": false,
+            "columnNames": [
+              "outfitId"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_outfit_clothing_item_join_outfitId` ON `${TABLE_NAME}` (`outfitId`)"
+          },
+          {
+            "name": "index_outfit_clothing_item_join_clothingId",
+            "unique": false,
+            "columnNames": [
+              "clothingId"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_outfit_clothing_item_join_clothingId` ON `${TABLE_NAME}` (`clothingId`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "outfits",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "outfitId"
+            ],
+            "referencedColumns": [
+              "outfitId"
+            ]
+          },
+          {
+            "table": "ClothingItem",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "clothingId"
+            ],
+            "referencedColumns": [
+              "clothingId"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "Date",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`date` TEXT NOT NULL, PRIMARY KEY(`date`))",
+        "fields": [
+          {
+            "fieldPath": "date",
+            "columnName": "date",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "date"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "Event",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`eventId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `event` TEXT, `location` TEXT, `date` TEXT, `time` TEXT, FOREIGN KEY(`date`) REFERENCES `Date`(`date`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "eventId",
+            "columnName": "eventId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "event",
+            "columnName": "event",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "location",
+            "columnName": "location",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "date",
+            "columnName": "date",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "time",
+            "columnName": "time",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "eventId"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": [
+          {
+            "table": "Date",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "date"
+            ],
+            "referencedColumns": [
+              "date"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "date_outfit_join",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`date` TEXT NOT NULL, `outfitId` INTEGER NOT NULL, PRIMARY KEY(`date`, `outfitId`), FOREIGN KEY(`date`) REFERENCES `Date`(`date`) ON UPDATE NO ACTION ON DELETE NO ACTION , FOREIGN KEY(`outfitId`) REFERENCES `outfits`(`outfitId`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "date",
+            "columnName": "date",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "outfitId",
+            "columnName": "outfitId",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "date",
+            "outfitId"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": [
+          {
+            "table": "Date",
+            "onDelete": "NO ACTION",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "date"
+            ],
+            "referencedColumns": [
+              "date"
+            ]
+          },
+          {
+            "table": "outfits",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "outfitId"
+            ],
+            "referencedColumns": [
+              "outfitId"
+            ]
+          }
+        ]
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'fd967e7fa49d024d5cb53542cf1a1d2b')"
+    ]
+  }
+}
