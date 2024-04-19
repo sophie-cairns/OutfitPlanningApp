@@ -14,7 +14,6 @@ public class WeeklyWeatherRepo {
     }
 
     public Call<WeeklyWeather> getWeekly(double lat, double lon) {
-        Log.i(MainActivity.TAG, "Weather key is " + Singleton.getInstance().getWeatherKey());
         String exclude = "current,minutely,alerts";
         String units = "metric";
         Log.i(MainActivity.TAG, "Request URL: " + getWeeklyService.getWeekly(lat, lon, exclude, units, Singleton.getInstance().getWeatherKey()).request().url());

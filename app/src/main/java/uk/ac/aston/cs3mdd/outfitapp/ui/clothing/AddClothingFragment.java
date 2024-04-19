@@ -147,7 +147,6 @@ public class AddClothingFragment extends Fragment {
                         @Override
                         public void onActivityResult(Uri result) {
                             if (result != null) {
-                                // Set the selected image to the ImageView
                                 imageView.setImageURI(result);
                             }
                         }

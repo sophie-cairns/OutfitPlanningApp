@@ -17,7 +17,6 @@ public interface OutfitClothingJoinDao {
             "outfit_clothing_item_join.outfitId = :outfitId")
     LiveData<List<ClothingItem>> getClothingItemsForOutfit(long outfitId);
 
-
     @Query("SELECT outfitId FROM outfit_clothing_item_join WHERE clothingId = :clothingId")
     List<Long> getOutfitsByClothingId(long clothingId);
 

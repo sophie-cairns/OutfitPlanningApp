@@ -212,7 +212,7 @@ public List<String> getTags(final List<ClothingItem> clothingItems) {
                 return new ArrayList<>(tags);
             }
         });
-        return future.get(); // Waits until the result is available and returns it
+        return future.get();
     } catch (ExecutionException | InterruptedException e) {
         e.printStackTrace();
         return null;

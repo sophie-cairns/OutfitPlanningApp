@@ -58,9 +58,6 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
         Event event = mEvents.get(position);
 
         if (resize) {
-//            holder.eventNameTextView.setTextSize(15);
-//            holder.eventLocationTextView.setTextSize(15);
-//            holder.eventTimeTextView.setTextSize(15);
             holder.verticalLinearLayout.setVisibility(View.VISIBLE);
             holder.horizontalLinearLayout.setVisibility(View.GONE);
 

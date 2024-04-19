@@ -84,22 +84,6 @@ public class WeatherViewModel extends ViewModel {
 
     }
 
-//    public void addHourlyForecast(HourlyWeather hourlyWeather) {
-//        List<HourlyWeather> currenthHourlyList = allHourlyForecasts.getValue();
-//
-//        if (currentHourlyList == null) {
-//            currentHourlyList = new ArrayList<>();
-//        }
-//
-//        if (hourlyWeather != null) {
-//            currentHourlyList.add(hourlyWeather);
-//            setHourly(hourlyWeather);
-//        }
-//
-//        allForecasts.setValue(currentHourlyList);
-//
-//    }
-
 
     public void setDaily(WeeklyWeather weeklyWeather) {
         List<Daily> dailyWeather = weeklyWeather.getDailyList();

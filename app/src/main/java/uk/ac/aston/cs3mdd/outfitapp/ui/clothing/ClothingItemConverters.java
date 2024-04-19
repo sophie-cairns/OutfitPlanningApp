@@ -16,7 +16,6 @@ public class ClothingItemConverters {
     public static Uri uriFromString(String value) {
         return value == null ? null : Uri.parse(value);
     }
-
     @TypeConverter
     public static String uriToString(Uri uri) {
         return uri == null ? null : uri.toString();

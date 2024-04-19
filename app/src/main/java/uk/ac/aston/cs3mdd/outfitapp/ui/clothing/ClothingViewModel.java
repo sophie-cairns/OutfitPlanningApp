@@ -8,7 +8,7 @@ import java.util.List;
 
 public class ClothingViewModel extends ViewModel {
 
-    private MutableLiveData<Boolean> isClothingView = new MutableLiveData<>(true);
+    private final MutableLiveData<Boolean> isClothingView = new MutableLiveData<>(true);
     private final MutableLiveData<List<List<String>>> selectedFilters = new MutableLiveData<>();
     public LiveData<Boolean> getIsClothingView() {
         return isClothingView;
