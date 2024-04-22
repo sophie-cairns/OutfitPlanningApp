@@ -25,7 +25,7 @@
             android:name="PLACES.API_KEY"
             android:value="AIzaSyBcsnPYJN9Uhljyk_vPWF07yfKFxmfXvV0" />
         <activity
-            android:name=".MainActivity"
+            android:name="uk.ac.aston.cs3ip.outfitapp.MainActivity"
             android:exported="true"
             android:label="@string/app_name">
             <intent-filter>
