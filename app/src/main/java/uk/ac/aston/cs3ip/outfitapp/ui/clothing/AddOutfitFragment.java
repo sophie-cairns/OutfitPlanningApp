@@ -49,6 +49,8 @@ public class AddOutfitFragment extends Fragment {
 
         Button addButton = clothingViewLayout.findViewById(R.id.add_button);
         addButton.setVisibility(View.GONE);
+        Button filterButton = clothingViewLayout.findViewById(R.id.filter_button);
+        filterButton.setVisibility(View.GONE);
 
         clothingDbViewModel = new ViewModelProvider(requireActivity()).get(ClothingDbViewModel.class);
 

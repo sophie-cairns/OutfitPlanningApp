@@ -16,9 +16,4 @@
         android:icon="@drawable/coat_hanger"
         android:title="@string/title_clothing" />
 
-    <item
-        android:id="@+id/navigation_settings"
-        android:icon="@drawable/settings"
-        android:title="@string/title_settings" />
-
 </menu>
